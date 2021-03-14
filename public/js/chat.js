@@ -45,8 +45,8 @@ const autoscroll = () => {
 
 socket.on('message', (message) => {
   const html = Mustache.render(messageTemplate, {
+    username: message.username,
     message: message.text,
-    username: username,
     createdAt: moment(message.createdAt).format('h:mm a'),
   });
   $messages.insertAdjacentHTML('beforeend', html);
@@ -56,7 +56,7 @@ socket.on('message', (message) => {
 socket.on('locationMessage', (message) => {
   const html = Mustache.render(locationMessageTemplate, {
     url: message.url,
-    username: username,
+    username: message.username,
     createdAt: moment(message.createdAt).format('h:mm a'),
   });
   $messages.insertAdjacentHTML('beforeend', html);
@@ -88,7 +88,7 @@ $messageForm.addEventListener('submit', (e) => {
 
   const message = e.target.elements.message.value;
 
-  socket.emit('sendMessage', message, username, room, (error) => {
+  socket.emit('sendMessage', message, (error) => {
     $messageFormButton.removeAttribute('disabled');
     $messageFormInput.value = '';
     $messageFormInput.focus();
